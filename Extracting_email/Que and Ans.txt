@@ -1,0 +1,77 @@
+2. How to handle websites with dynamically loaded content?(Short Para with example)
+==>Websites with dynamically loaded content use JavaScript to load data after the initial HTML page is rendered. This can pose challenges     for traditional scraping methods that only parse the initial HTML. To handle such websites, tools like Selenium can be used. Selenium automates a web browser, allowing you to interact with and extract content from dynamically loaded pages.
+Example:
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+# Set up the Selenium WebDriver
+driver = webdriver.Chrome()
+
+# Navigate to the website with dynamic content
+driver.get('http://example.com')
+
+# Wait for the content to load
+content = driver.find_element(By.ID, 'dynamicContentId')
+
+# Extract the content
+data = content.text
+
+# Close the browser
+driver.quit()
+
+print(data)
+
+
+3. How to deal with websites that have anti-scraping mechanisms? (Short Para with example)
+==>Websites implement anti-scraping mechanisms such as CAPTCHAs, rate limiting, and IP blocking to prevent automated access. To bypass these, ethical scraping practices should be adopted, including respecting robots.txt files, mimicking human behavior, and using rotating proxies.
+Example:
+
+import requests
+from time import sleep
+from fake_useragent import UserAgent
+from itertools import cycle
+
+# List of proxy servers
+proxies = cycle(['http://proxy1', 'http://proxy2', 'http://proxy3'])
+
+# Random user agent
+ua = UserAgent()
+
+# Function to fetch a page
+def fetch_page(url):
+    proxy = next(proxies)
+    headers = {'User-Agent': ua.random}
+    response = requests.get(url, headers=headers, proxies={"http": proxy, "https": proxy})
+    return response.text
+
+# Fetch page with retries and delays
+url = 'http://example.com'
+for _ in range(5):
+    try:
+        page = fetch_page(url)
+        break
+    except Exception as e:
+        print(f"Error: {e}")
+        sleep(5)
+
+print(page)
+
+
+4. How to ensure data accuracy and completeness?
+==>To ensure data accuracy and completeness in web scraping, it is essential to validate the scraped data against known patterns or databases, handle missing or inconsistent data appropriately, and perform thorough testing.
+
+Steps:
+
+Data Validation: Use regular expressions or specific validation libraries to ensure data conforms to expected patterns.
+Error Handling: Implement robust error handling to manage missing or incomplete data.
+Testing: Regularly test scraping scripts to verify that data extraction remains accurate as websites update their structures.
+
+
+5. How to manage and store large volumes of scraped data?
+==>Managing and storing large volumes of scraped data involves using appropriate databases and data processing techniques. Depending on the data type and access patterns, different storage solutions may be used. MongoDB is suitable for storing unstructured data, while SQL databases can be used for structured data.
+
+
+
+
+
